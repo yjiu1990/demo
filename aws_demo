@@ -1,0 +1,41 @@
+import boto3
+import datetime
+
+client = boto3.client('cloudwatch')
+
+# response = client.list_metrics(
+#     Namespace='AWS/EC2',
+#     MetricName='CPUUtilization',
+#     RecentlyActive='PT3H'
+# )
+
+# print(response)
+start_time = datetime.datetime.now() - datetime.timedelta(minutes=5)
+end_time = datetime.datetime.now()
+print(start_time, end_time)
+response = client.get_metric_data(
+    MetricDataQueries=[
+        {
+            'Id': 'string',
+            'Label': 'CPU使用',
+            'MetricStat': {
+                'Metric': {
+                    'Namespace': 'AWS/EC2',
+                    'MetricName': 'CPUUtilization ',
+                    'Dimensions': [
+                        {
+                            'Name': 'InstanceId',
+                            'Value': 'i-0c2cba1438f2e0c3c'
+                        },
+                    ],
+                },
+                'Period': 300,
+                'Stat': 'Average',
+            },
+
+        },
+    ],
+    StartTime=datetime.datetime(2021, 3, 29),
+    EndTime=datetime.datetime(2021, 3, 31)
+)
+print(response)
